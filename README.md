@@ -1,159 +1,50 @@
-# TOC Project 2020
+# TOC Project 2022
 
-[![Maintainability](https://api.codeclimate.com/v1/badges/dc7fa47fcd809b99d087/maintainability)](https://codeclimate.com/github/NCKU-CCS/TOC-Project-2020/maintainability)
+## 設計理念
+選課是成大學生每個學期初最重要的事情之一，雖然選課公告寫得很詳細，但是內容就會變得瑣碎。這支LineBot最主要的功能是幫助大家用少少的力氣，得到大部分的資訊，且透過按鈕輸入資訊，就能幫你把不需要的資訊過濾掉，讓大家在選課前能夠更方便。
 
-[![Known Vulnerabilities](https://snyk.io/test/github/NCKU-CCS/TOC-Project-2020/badge.svg)](https://snyk.io/test/github/NCKU-CCS/TOC-Project-2020)
-
-
-Template Code for TOC Project 2020
-
-A Line bot based on a finite state machine
-
-More details in the [Slides](https://hackmd.io/@TTW/ToC-2019-Project#) and [FAQ](https://hackmd.io/s/B1Xw7E8kN)
-
-## Setup
-
-### Prerequisite
-* Python 3.6
-* Pipenv
-* Facebook Page and App
-* HTTPS Server
-
-#### Install Dependency
-```sh
-pip3 install pipenv
-
-pipenv --three
-
-pipenv install
-
-pipenv shell
-```
-
-* pygraphviz (For visualizing Finite State Machine)
-    * [Setup pygraphviz on Ubuntu](http://www.jianshu.com/p/a3da7ecc5303)
-	* [Note: macOS Install error](https://github.com/pygraphviz/pygraphviz/issues/100)
+## 介紹
+### 名稱
+成大選課懶人包
+![]()
 
 
-#### Secret Data
-You should generate a `.env` file to set Environment Variables refer to our `.env.sample`.
-`LINE_CHANNEL_SECRET` and `LINE_CHANNEL_ACCESS_TOKEN` **MUST** be set to proper values.
-Otherwise, you might not be able to run your code.
+### 功能
++ 主選單
+1. 查詢這個階段可以選的科目
+2. 顯示任一科目的所有選課時間
+3. 快速查詢各階段時間
+4. 選課網站整理
+5. 查詢圖書館目前餘額 / 選課內容錯誤回報
+![](https://cdn.discordapp.com/attachments/926861632460709962/927195719838871582/unknown.png)
 
-#### Run Locally
-You can either setup https server or using `ngrok` as a proxy.
++ 現在可以選什麼：
+輸入使用者的年級後，就能將此階段能選的課列出來；
+如果現在不是選課時間，就會提醒即將到來的階段。
+![](https://cdn.discordapp.com/attachments/926861632460709962/927196756767289394/LINE_capture_662824031.959698.jpg)
 
-#### a. Ngrok installation
-* [ macOS, Windows, Linux](https://ngrok.com/download)
+![](https://cdn.discordapp.com/attachments/926861632460709962/927196756964438016/LINE_capture_662824061.295062.jpg)
 
-or you can use Homebrew (MAC)
-```sh
-brew cask install ngrok
-```
++ 各科選課時間查詢：
+輸入使用者的年級和科目後，就能將該科目的所有選課時間印出，讓使用者在補選時更方便。
+![](https://cdn.discordapp.com/attachments/926861632460709962/927197775052046407/LINE_capture_662824361.155217.jpg)
 
-**`ngrok` would be used in the following instruction**
++ 各階段時間查詢：
+輸入階段後，就能將該階段的時間印出。
+![](https://cdn.discordapp.com/attachments/926861632460709962/927198156050038824/IMG_6549.png)
 
-```sh
-ngrok http 8000
-```
++ 選課相關網站：
+以按鈕的方式將選課常用網站列出，方便使用者點選。
+![link text](https://cdn.discordapp.com/attachments/926861632460709962/927198949801099294/IMG_6551.png)
 
-After that, `ngrok` would generate a https URL.
++ 其他功能(圖書館空位查詢)：
+利用爬蟲將學校各場館的空位即時顯示，並用不同顏色的燈號來表示滿座程度。
+![link text](https://cdn.discordapp.com/attachments/926861632460709962/927198949293568020/IMG_6550.png)
 
-#### Run the sever
-
-```sh
-python3 app.py
-```
-
-#### b. Servo
-
-Or You can use [servo](http://serveo.net/) to expose local servers to the internet.
++ 其他功能(錯誤回報)：
+連結到Google表單，作為錯誤回報管道。
 
 
-## Finite State Machine
-![fsm](./img/show-fsm.png)
+## Fsm 結構圖
+![](https://cdn.discordapp.com/attachments/926861632460709962/927200178799255552/IMG_6553.png)
 
-## Usage
-The initial state is set to `user`.
-
-Every time `user` state is triggered to `advance` to another state, it will `go_back` to `user` state after the bot replies corresponding message.
-
-* user
-	* Input: "go to state1"
-		* Reply: "I'm entering state1"
-
-	* Input: "go to state2"
-		* Reply: "I'm entering state2"
-
-## Deploy
-Setting to deploy webhooks on Heroku.
-
-### Heroku CLI installation
-
-* [macOS, Windows](https://devcenter.heroku.com/articles/heroku-cli)
-
-or you can use Homebrew (MAC)
-```sh
-brew tap heroku/brew && brew install heroku
-```
-
-or you can use Snap (Ubuntu 16+)
-```sh
-sudo snap install --classic heroku
-```
-
-### Connect to Heroku
-
-1. Register Heroku: https://signup.heroku.com
-
-2. Create Heroku project from website
-
-3. CLI Login
-
-	`heroku login`
-
-### Upload project to Heroku
-
-1. Add local project to Heroku project
-
-	heroku git:remote -a {HEROKU_APP_NAME}
-
-2. Upload project
-
-	```
-	git add .
-	git commit -m "Add code"
-	git push -f heroku master
-	```
-
-3. Set Environment - Line Messaging API Secret Keys
-
-	```
-	heroku config:set LINE_CHANNEL_SECRET=your_line_channel_secret
-	heroku config:set LINE_CHANNEL_ACCESS_TOKEN=your_line_channel_access_token
-	```
-
-4. Your Project is now running on Heroku!
-
-	url: `{HEROKU_APP_NAME}.herokuapp.com/callback`
-
-	debug command: `heroku logs --tail --app {HEROKU_APP_NAME}`
-
-5. If fail with `pygraphviz` install errors
-
-	run commands below can solve the problems
-	```
-	heroku buildpacks:set heroku/python
-	heroku buildpacks:add --index 1 heroku-community/apt
-	```
-
-	refference: https://hackmd.io/@ccw/B1Xw7E8kN?type=view#Q2-如何在-Heroku-使用-pygraphviz
-
-## Reference
-[Pipenv](https://medium.com/@chihsuan/pipenv-更簡單-更快速的-python-套件管理工具-135a47e504f4) ❤️ [@chihsuan](https://github.com/chihsuan)
-
-[TOC-Project-2019](https://github.com/winonecheng/TOC-Project-2019) ❤️ [@winonecheng](https://github.com/winonecheng)
-
-Flask Architecture ❤️ [@Sirius207](https://github.com/Sirius207)
-
-[Line line-bot-sdk-python](https://github.com/line/line-bot-sdk-python/tree/master/examples/flask-echo)
