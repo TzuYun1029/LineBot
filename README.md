@@ -46,5 +46,5 @@
 
 
 ## Fsm 結構圖
-![](https://cdn.discordapp.com/attachments/926861632460709962/927200178799255552/IMG_6553.png)
+![](https://cdn.discordapp.com/attachments/926861632460709962/927206754578726912/fsm.png)
 
