@@ -287,7 +287,7 @@ class TocMachine(GraphMachine):
         localtime = time.localtime()
         global grade
         result = time.strftime("%m/%d %H:%M", localtime)
-        result = '01/25 15:00'
+        # result = '01/25 15:00'
         output = ''
         printed_label = False
         if grade != '研究所':
